@@ -127,5 +127,20 @@ int scoreFor(int player, struct gameState *state);
 int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 /* Set array position of each player who won (remember ties!) to
    1, others to 0 */
+   
+void playAdventurer(int drawntreasure, struct gameState *state, int currentPlayer, int *temphand, int z);
+/* Play adventurer card */
+
+void playSmithy(int currentPlayer, struct gameState *state, int handPos);
+/* Play smithy card */
+
+void playGreatHall(int currentPlayer, struct gameState *state, int handPos);
+/* Play great_hall card */
+
+void playVillage(int currentPlayer, struct gameState *state, int handPos);
+/* Play village card */
+
+void playCouncilRoom(int currentPlayer, struct gameState *state, int handPos);
+/* Play council_room card */
 
 #endif
