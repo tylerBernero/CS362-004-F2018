@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NUM_TESTS 4
+#define NUM_TESTS 3
 
 int main()
 {
@@ -60,6 +60,9 @@ int main()
 	}
 	
 	//TEST 2: Ensure 1 card is subtracted from player deck
+	
+	//Initialize new game
+    initializeGame(numPlayers, kingdomCards, randSeed, &GState);
     
     // copy the game state to a test case
 	memcpy(&oldGState, &GState, sizeof(struct gameState));
@@ -75,8 +78,16 @@ int main()
 	}
 	
 	//TEST 3: Ensure 1 card is added to player hand when deck is 0 which causes player to shuffle
-	//Manually set player deck to 0 to force drawCard() to shuffle
+	//Note: Did not test discard pile -1 when having to shuffle because the process of returning discarded cards into deck throws the count off
+
+	//Initialize new game
+    initializeGame(numPlayers, kingdomCards, randSeed, &GState);
+    
+    //Manually set player deck to 0 to force drawCard() to shuffle
 	GState.deckCount[player1] = 0;
+	
+	//Manually set the player to have 5 cards discarded so that they have something to shuffle into new deck
+	GState.discardCount[player1] = 10;		
     
     // copy the game state to a test case
 	memcpy(&oldGState, &GState, sizeof(struct gameState));
@@ -90,24 +101,6 @@ int main()
 	else
 	{
 	    printf("TEST 3: FAILED with +1 card not in hand when deckCount is 0\n");
-	}
-	
-	//TEST 4: Ensure 1 card is subtracted from player deck when deck is 0 which causes player to shuffle
-	//Manually set player deck to 0 to force drawCard() to shuffle
-	GState.deckCount[player1] = 0;
-    
-    // copy the game state to a test case
-	memcpy(&oldGState, &GState, sizeof(struct gameState));
-	
-	drawCard(player1, &GState);
-	if(GState.deckCount[player1] == oldGState.deckCount[player1] - 1)
-	{
-	    printf("TEST 4: PASSED with +1 card in deck when deckCount is 0\n");
-	    numTestsPassed++;
-	}
-	else
-	{
-	    printf("TEST 4: FAILED with +1 card not in deck when deckCount is 0\n");
 	}
 	
 	
