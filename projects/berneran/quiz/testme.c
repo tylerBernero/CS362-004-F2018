@@ -3,16 +3,19 @@
 #include<stdlib.h>
 #include<time.h>
 
+//GLobal Variables for the char* to work between functions
+char randString[6];
+
 char inputChar()
 {
     // TODO: rewrite this function
     
     //Create pool of characters for randChar to "pool" from
-    //Consists of the 9 possible target statements
-    char inputPool[9] = "[({ ax})]";
+    //Consists of all possible letters/symbols for all target statements
+    char inputPool[14] = "[({ ax})]rest";
     
-    //Find random value between 0-9
-    int randValue = rand() % 9;
+    //Find random value between 0-12
+    int randValue = rand() % 13;
     
     //store the randValue's position from inputPool into randChar and return
     char randChar = inputPool[randValue];
@@ -23,11 +26,7 @@ char *inputString()
 {
     // TODO: rewrite this function
     
-    //Create a pool of characters for randChar to "pool" from
-    //Consists of the 4 possible letters in the target statement
-    char inputPool[4] = "rest";
-    char randChar;
-    char randString[6];
+    //memset randString everytime to prevent anything bad from happening
     memset(randString, '\0', 6);
     
     int i;
@@ -35,18 +34,11 @@ char *inputString()
     //iterate 5 times to ensure that the returned string can spell the targeted statement
     for(i = 0; i < 5; i++)
     {
-      //Find random value between 0-4
-      randChar = rand() % 4;
-      
-      //store random letter from the inputPool into the string
-      randString[i] = inputPool[randChar];
-      
+      //Call get inputChar() because its pool contains the letters we need for targeted statement
+      randString[i] = inputChar();
     }
 
-    //transfer the char[] to a c* and return
-    //target statement: reset
-    char* cString = randString;
-    return cString;
+    return randString;
 }
 
 void testme()

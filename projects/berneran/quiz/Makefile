@@ -5,4 +5,4 @@ default: testme.c
 	./testme
 
 clean:
-	rm testme
+	rm testme *.gcda *.gcno
