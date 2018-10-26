@@ -3,17 +3,18 @@
 #include<stdlib.h>
 #include<time.h>
 
-//GLobal Variables for the char* to work between functions
+//GLobal Variable for the char* to work between functions
 char randString[6];
+
+//Create pool of characters for randChar to "pool" from
+//Consists of all possible letters/symbols for all target statements
+//I decided to move my pool to be a global variable so that my functions would have faster access to it rather than creating a new pool every call
+char inputPool[14] = "[({ ax})]rest";
 
 char inputChar()
 {
     // TODO: rewrite this function
-    
-    //Create pool of characters for randChar to "pool" from
-    //Consists of all possible letters/symbols for all target statements
-    char inputPool[14] = "[({ ax})]rest";
-    
+
     //Find random value between 0-12
     int randValue = rand() % 13;
     
