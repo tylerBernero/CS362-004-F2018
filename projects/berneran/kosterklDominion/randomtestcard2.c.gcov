@@ -1,0 +1,275 @@
+        -:    0:Source:randomtestcard2.c
+        -:    0:Graph:randomtestcard2.gcno
+        -:    0:Data:randomtestcard2.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1://Village
+        -:    2:
+        -:    3:#include "dominion.h"
+        -:    4:#include "dominion_helpers.h"
+        -:    5:#include "rngs.h"
+        -:    6:#include <stdio.h>
+        -:    7:#include <math.h>
+        -:    8:#include <time.h>
+        -:    9:#include <stdlib.h>
+        -:   10:#include <stdlib.h>
+        -:   11:#include <string.h>
+        -:   12:
+        -:   13:#define NUM_TESTS 6
+        -:   14:#define NUM_ITERATIONS 500
+        -:   15:#define MAX_TESTS NUM_TESTS * NUM_ITERATIONS
+        -:   16:
+function main called 1 returned 100% blocks executed 96%
+        1:   17:int main()
+        -:   18:{
+        -:   19:    //get random number seed
+        1:   20:    srand(time(NULL));                          
+call    0 returned 100%
+call    1 returned 100%
+        -:   21:    
+        -:   22:    //Keep track of number of Random Tests passes
+        1:   23:    int numRandomTestsPassed = 0;
+        -:   24:    
+        1:   25:    printf("TESTING Village\n");
+call    0 returned 100%
+        -:   26:    
+        -:   27:    //Loop number of NUM_ITERATIONS and get a different seed everytime in order to initiate a randomized game each run
+        -:   28:    int j;
+      501:   29:    for(j = 0; j < NUM_ITERATIONS; j++)
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:   30:    {
+        -:   31:        //Variables needed to initialize a game
+      500:   32:        int numPlayers = 2;
+      500:   33:        int player1 = 0;
+      500:   34:        int player2 = 1;
+      500:   35:        int kingdomCards[10] = {                               //kingdom cards the game can choose from
+        -:   36:            adventurer, 
+        -:   37:            gardens, 
+        -:   38:            embargo, 
+        -:   39:            village, 
+        -:   40:            minion, 
+        -:   41:            mine, 
+        -:   42:            cutpurse,
+        -:   43:            sea_hag, 
+        -:   44:            tribute, 
+        -:   45:            smithy
+        -:   46:        };
+        -:   47:        
+      500:   48:        int randSeed = rand();
+call    0 returned 100%
+        -:   49:        struct gameState GState;
+        -:   50:        struct gameState oldGState;
+        -:   51:        
+        -:   52:        //Variables for cardEffect
+      500:   53:        int choice1 = 0;
+      500:   54:        int choice2 = 0;
+      500:   55:        int choice3 = 0;
+      500:   56:        int handPos = 0;
+      500:   57:        int bonus = 0;
+        -:   58:        
+        -:   59:        //bools for changes in the game
+        -:   60:        //0 = no differences
+        -:   61:        //1 = differences
+      500:   62:        int victoryChanges = 0;
+      500:   63:        int kingdomChanges = 0;
+        -:   64:        
+        -:   65:        int i;
+        -:   66:        
+        -:   67:        
+        -:   68:        //Initialize the game
+      500:   69:        initializeGame(numPlayers, kingdomCards, randSeed, &GState);
+call    0 returned 100%
+        -:   70:        
+        -:   71:        //TESTING Village
+        -:   72:        //Valid unit tests because it tests:
+        -:   73:        //1. Current player should receive exact 1 card then discard.
+        -:   74:        //2. Cards should come from own draw pile
+        -:   75:        //3. No state change should occur to the victory card piles 
+        -:   76:        //4. No state change should occur to the kingdom card piles.
+        -:   77:        //5. No state change should occur for other players.
+        -:   78:        //6. Current player should receive exact 1 action.
+        -:   79:        //printf("TESTING Village\n");
+        -:   80:        
+        -:   81:        //TEST 1: Ensure Current player receives 1 card then discards
+        -:   82:        
+        -:   83:        // copy the game state to a test case
+      500:   84:    	memcpy(&oldGState, &GState, sizeof(struct gameState));
+        -:   85:    	
+        -:   86:    	//Note: Village is refactored into it's own function that is called from within cardEffect
+      500:   87:    	cardEffect(village, choice1, choice2, choice3, &GState, handPos, &bonus);
+call    0 returned 100%
+      500:   88:    	if(GState.handCount[player1] == oldGState.handCount[player1] + 1 - 1)       //1 card from draw then -1 discard
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:   89:    	{
+        -:   90:    	    //printf("TEST 1: PASSED with correct number of cards in hand\n");
+      500:   91:    	    numRandomTestsPassed++;
+        -:   92:    	}
+        -:   93:    	else
+        -:   94:    	{
+        -:   95:    	    //printf("TEST 1: FAILED with correct number of cards not in hand\n");
+        -:   96:    	}
+        -:   97:    	
+        -:   98:    	//TEST 2: 1 card should be removed from player's own pile
+        -:   99:    	
+        -:  100:    	//Initialize new game
+      500:  101:        initializeGame(numPlayers, kingdomCards, randSeed, &GState);
+call    0 returned 100%
+        -:  102:    	
+        -:  103:    	// copy the game state to a test case
+      500:  104:    	memcpy(&oldGState, &GState, sizeof(struct gameState));
+        -:  105:    	
+      500:  106:    	cardEffect(village, choice1, choice2, choice3, &GState, handPos, &bonus);
+call    0 returned 100%
+      500:  107:    	if(GState.deckCount[player1] == oldGState.deckCount[player1] - 1)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  108:    	{
+        -:  109:    	    //printf("TEST 2: PASSED with -1 card in deck\n");
+      500:  110:    	    numRandomTestsPassed++;
+        -:  111:    	}
+        -:  112:    	else
+        -:  113:    	{
+        -:  114:    	    //printf("TEST 2: FAILED with -1 card not in deck\n");
+        -:  115:    	}
+        -:  116:    
+        -:  117:        
+        -:  118:        
+        -:  119:        //TEST 3: No state change should occur to the victory card piles
+        -:  120:        
+        -:  121:        //Initialize new game
+      500:  122:        initializeGame(numPlayers, kingdomCards, randSeed, &GState);
+call    0 returned 100%
+        -:  123:    	
+        -:  124:    	// copy the game state to a test case
+      500:  125:    	memcpy(&oldGState, &GState, sizeof(struct gameState));
+        -:  126:    	
+      500:  127:    	cardEffect(village, choice1, choice2, choice3, &GState, handPos, &bonus);
+call    0 returned 100%
+        -:  128:    
+        -:  129:    	
+        -:  130:    	//Check state of victory cards (1-3 in the supply count)
+     2000:  131:    	for(i = 1; i < 4; i++)
+branch  0 taken 75%
+branch  1 taken 25% (fallthrough)
+        -:  132:    	{
+     1500:  133:    	    if(GState.supplyCount[i] != oldGState.supplyCount[i])
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  134:    	    {
+        -:  135:    	        //indicate changes in victory pile if states do not match
+    #####:  136:    	        victoryChanges = 1;
+        -:  137:    	    }
+        -:  138:    	}
+        -:  139:    	
+      500:  140:    	if(victoryChanges == 0)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  141:    	{
+        -:  142:    	    //printf("TEST 3: PASSED with no change in the victory cards\n");
+      500:  143:    	    numRandomTestsPassed++;
+        -:  144:    	}
+        -:  145:    	else
+        -:  146:    	{
+        -:  147:    	    //printf("TEST 3: FAILED with change in the victory cards");
+        -:  148:    	}
+        -:  149:    	
+        -:  150:    	//TEST 4: No state change should occur to the kingdom card piles.
+        -:  151:    	
+        -:  152:    	//Initialize new game
+      500:  153:        initializeGame(numPlayers, kingdomCards, randSeed, &GState);
+call    0 returned 100%
+        -:  154:    	
+        -:  155:    	// copy the game state to a test case
+      500:  156:    	memcpy(&oldGState, &GState, sizeof(struct gameState));
+        -:  157:    	
+      500:  158:    	cardEffect(village, choice1, choice2, choice3, &GState, handPos, &bonus);
+call    0 returned 100%
+        -:  159:    	
+        -:  160:    	//Check state of kingdom cards (7-27 in the supply count)
+    10500:  161:    	for(i = 7; i < 27; i++)
+branch  0 taken 95%
+branch  1 taken 5% (fallthrough)
+        -:  162:    	{
+    10000:  163:    	    if(GState.supplyCount[i] != oldGState.supplyCount[i])
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  164:    	    {
+        -:  165:    	        //indicate changes in victory pile if states do not match
+    #####:  166:    	        kingdomChanges = 1;
+        -:  167:    	    }
+        -:  168:    	}
+        -:  169:    	
+      500:  170:    	if(kingdomChanges == 0)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  171:    	{
+        -:  172:    	    //printf("TEST 4: PASSED with no change in the kingdom cards\n");
+      500:  173:    	    numRandomTestsPassed++;
+        -:  174:    	}
+        -:  175:    	else
+        -:  176:    	{
+        -:  177:    	    //printf("TEST 4: FAILED with change in the kingdom cards");
+        -:  178:    	}
+        -:  179:    	
+        -:  180:    	//TEST 5: Ensure no state change for other players
+        -:  181:    	
+        -:  182:    	//Initialize new game
+      500:  183:        initializeGame(numPlayers, kingdomCards, randSeed, &GState);
+call    0 returned 100%
+        -:  184:    	
+        -:  185:    	// copy the game state to a test case
+      500:  186:    	memcpy(&oldGState, &GState, sizeof(struct gameState));
+        -:  187:    	
+      500:  188:    	cardEffect(village, choice1, choice2, choice3, &GState, handPos, &bonus);
+call    0 returned 100%
+        -:  189:    	
+        -:  190:    	//Check player 2's deck and hand to make sure no change was made between states
+      500:  191:    	if(GState.handCount[player2] == oldGState.handCount[player2] && GState.deckCount[player2] == oldGState.deckCount[player2])
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+branch  2 taken 100% (fallthrough)
+branch  3 taken 0%
+        -:  192:    	{
+        -:  193:    	    //printf("TEST 5: PASSED with no change in other players\n");
+      500:  194:    	    numRandomTestsPassed++;
+        -:  195:    	}
+        -:  196:    	else
+        -:  197:    	{
+        -:  198:    	    //printf("TEST 5: FAILED with change in other players\n");
+        -:  199:    	}
+        -:  200:    	
+        -:  201:    	//TEST 6: Ensure current player gets +1 action
+        -:  202:    	
+        -:  203:    	//Initialize new game
+      500:  204:        initializeGame(numPlayers, kingdomCards, randSeed, &GState);
+call    0 returned 100%
+        -:  205:    	
+        -:  206:    	// copy the game state to a test case
+      500:  207:    	memcpy(&oldGState, &GState, sizeof(struct gameState));
+        -:  208:    	
+      500:  209:    	cardEffect(village, choice1, choice2, choice3, &GState, handPos, &bonus);
+call    0 returned 100%
+        -:  210:    	
+        -:  211:    	//Check player 1 gets +2 action
+      500:  212:    	if(GState.numActions == oldGState.numActions + 2)   
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  213:    	{
+        -:  214:    	    //printf("TEST 6: PASSED with +2 actions\n");
+      500:  215:    	    numRandomTestsPassed++;
+        -:  216:    	}
+        -:  217:    	else
+        -:  218:    	{
+        -:  219:    	    //printf("TEST 6: FAILED with not +2 actions\n");
+        -:  220:    	}
+        -:  221:    	
+        -:  222:    }
+        -:  223:    
+        1:  224:    printf("\n\nTESTING COMPLETE.\n%d RANDOM TESTS PASSED OUT OF %d TOTAL RANDOM TESTS\n\n\n", numRandomTestsPassed, MAX_TESTS);
+call    0 returned 100%
+        -:  225:
+        -:  226:    
+        1:  227:    return 0;
+        -:  228:}
