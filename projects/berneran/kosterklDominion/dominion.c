@@ -1243,7 +1243,8 @@ int playSmithy(int currentPlayer, int handPos, struct gameState *state)
 {
   //draw 3 cards
   int i = 0;
-  for (i = 0; i <= 3; i++)    // changed this to i <= 3 from i < 3.  This will cause smithy to draw 4 cards instead of 3.  BUG 1
+  for (i = 0; i <= 3; i++)  //buggy  // changed this to i <= 3 from i < 3.  This will cause smithy to draw 4 cards instead of 3.  BUG 1
+  for (i = 0; i < 3; i++)  //fixed 
 	{
 	  drawCard(currentPlayer, state);
 	}
@@ -1299,7 +1300,8 @@ int playAdventurer(int currentPlayer,  int temphand[], struct gameState *state)
 	  }
   }
       
-  while(z-1 > 1)    // introduced bug here with discarding cards  Original: z-1 >= 0, so with z-1 > 1, this never drops to 0 to discard all the cards  BUG 2
+  //while(z-1 > 1)  //buggy    // introduced bug here with discarding cards  Original: z-1 >= 0, so with z-1 > 1, this never drops to 0 to discard all the cards  BUG 2
+  while(z-1 >= 0) //fixed
   {
 	  state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
 	  z = z - 1;

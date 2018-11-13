@@ -90,7 +90,7 @@ int main()
 	
 	//Note: Assignment 2 a bug was placed here that gave the player 5 cards instead of 3, so this test should fail
 	cardEffect(smithy, choice1, choice2, choice3, &GState, handPos, &bonus);
-	if(GState.deckCount[player1] == oldGState.deckCount[player1] - 3)
+	if(GState.deckCount[player1] == (oldGState.deckCount[player1] - 3 + 1))
 	{
 	    printf("TEST 2: PASSED with -3 cards in deck\n");
 	    numTestsPassed++;

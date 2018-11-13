@@ -15,11 +15,11 @@
         -:   10:#include <stdlib.h>
         -:   11:#include <string.h>
         -:   12:
-        -:   13:#define NUM_TESTS 5
+        -:   13:#define NUM_TESTS 6
         -:   14:#define NUM_ITERATIONS 500
         -:   15:#define MAX_TESTS NUM_TESTS * NUM_ITERATIONS
         -:   16:
-function main called 1 returned 100% blocks executed 95%
+function main called 1 returned 100% blocks executed 96%
         1:   17:int main()
         -:   18:{
         -:   19:    //get random number seed
@@ -235,11 +235,46 @@ branch  3 taken 0%
         -:  193:    	{
         -:  194:    	    //printf("TEST 5: FAILED with change in other players\n");
         -:  195:    	}
-        -:  196:    }
+        -:  196:    	
         -:  197:    
-        1:  198:    printf("\n\nTESTING COMPLETE.\n%d RANDOM TESTS PASSED OUT OF %d TOTAL RANDOM TESTS\n\n\n", numRandomTestsPassed, MAX_TESTS);
+        -:  198:    
+        -:  199:    //TEST 6: Ensure all cards drawn except treasure are added to discard
+        -:  200:	
+        -:  201:	//Initialize new game
+      500:  202:    initializeGame(numPlayers, kingdomCards, randSeed, &GState);
 call    0 returned 100%
-        -:  199:
-        -:  200:    
-        1:  201:    return 0;
-        -:  202:}
+        -:  203:	
+        -:  204:	// copy the game state to a test case
+      500:  205:	memcpy(&oldGState, &GState, sizeof(struct gameState));
+        -:  206:	
+      500:  207:	cardEffect(adventurer, choice1, choice2, choice3, &GState, handPos, &bonus);
+call    0 returned 100%
+        -:  208:	
+        -:  209:	//get number of cards drawn and number of cards discarded
+      500:  210:	int cardsDrawn = oldGState.deckCount[player1] - GState.deckCount[player1];
+        -:  211:	//printf("Cards Drawn: %d\n", cardsDrawn);
+        -:  212:	
+      500:  213:	int cardsDiscarded = GState.discardCount[player1] - oldGState.discardCount[player1];
+        -:  214:	//printf("Cards Discarded: %d\n", cardsDiscarded);
+        -:  215:
+        -:  216:	
+        -:  217:	//Check that all but 2 cards were discarded
+      500:  218:	if((cardsDrawn - cardsDiscarded) == 2)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  219:	{
+        -:  220:	    //printf("TEST 6: PASSED with correct number of cards discarded\n");
+      500:  221:	    numRandomTestsPassed++;
+        -:  222:	}
+        -:  223:	else
+        -:  224:	{
+        -:  225:	    //printf("TEST 6: FAILED with correct number of cards not discarded\n");
+        -:  226:	}
+        -:  227:    }
+        -:  228:    
+        1:  229:    printf("\n\nTESTING COMPLETE.\n%d RANDOM TESTS PASSED OUT OF %d TOTAL RANDOM TESTS\n\n\n", numRandomTestsPassed, MAX_TESTS);
+call    0 returned 100%
+        -:  230:
+        -:  231:    
+        1:  232:    return 0;
+        -:  233:}

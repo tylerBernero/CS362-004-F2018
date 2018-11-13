@@ -39,42 +39,42 @@ unittestresults: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c car
 	gcc -o ut1 -g unittest1.c dominion.o rngs.o $(CFLAGS)
 	echo "unittest1.c:" > unittestresults.out
 	./ut1 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f -b dominion.c >> unittestresults.out
 	
 	gcc -o ut2 -g unittest2.c dominion.o rngs.o $(CFLAGS)
 	echo "unittest2.c:" >> unittestresults.out
 	./ut2 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f -b dominion.c >> unittestresults.out
 	
 	gcc -o ut3 -g unittest3.c dominion.o rngs.o $(CFLAGS)
 	echo "unittest3.c:" >> unittestresults.out
 	./ut3 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f -b dominion.c >> unittestresults.out
 	
 	gcc -o ut4 -g unittest4.c dominion.o rngs.o $(CFLAGS)
 	echo "unittest4.c:" >> unittestresults.out
 	./ut4 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f -b dominion.c >> unittestresults.out
 	
 	gcc -o ct1 -g cardtest1.c dominion.o rngs.o $(CFLAGS)
 	echo "cardtest1.c:" >> unittestresults.out
 	./ct1 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f -b dominion.c >> unittestresults.out
 	
 	gcc -o ct2 -g cardtest2.c dominion.o rngs.o $(CFLAGS)
 	echo "cardtest2.c:" >> unittestresults.out
 	./ct2 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f -b dominion.c >> unittestresults.out
 	
 	gcc -o ct3 -g cardtest3.c dominion.o rngs.o $(CFLAGS)
 	echo "cardtest3.c:" >> unittestresults.out
 	./ct3 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f -b dominion.c >> unittestresults.out
 	
 	gcc -o ct4 -g cardtest4.c dominion.o rngs.o $(CFLAGS)
 	echo "cardtest4.c:" >> unittestresults.out
 	./ct4 >> unittestresults.out
-	gcov -b dominion.c >> unittestresults.out
+	gcov -f -b dominion.c >> unittestresults.out
 	
 unit1: unittest1.c dominion.o rngs.o
 	gcc -o ut1 unittest1.c dominion.o rngs.o $(CFLAGS)

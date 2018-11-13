@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NUM_TESTS 5
+#define NUM_TESTS 6
 
 int main()
 {
@@ -182,6 +182,35 @@ int main()
 	else
 	{
 	    printf("TEST 5: FAILED with change in other players\n");
+	}
+	
+	//TEST 6: Ensure all cards drawn except treasure are added to discard
+	
+	//Initialize new game
+    initializeGame(numPlayers, kingdomCards, randSeed, &GState);
+	
+	// copy the game state to a test case
+	memcpy(&oldGState, &GState, sizeof(struct gameState));
+	
+	cardEffect(adventurer, choice1, choice2, choice3, &GState, handPos, &bonus);
+	
+	//get number of cards drawn and number of cards discarded
+	int cardsDrawn = oldGState.deckCount[player1] - GState.deckCount[player1];
+	//printf("Cards Drawn: %d\n", cardsDrawn);
+	
+	int cardsDiscarded = GState.discardCount[player1] - oldGState.discardCount[player1];
+	//printf("Cards Discarded: %d\n", cardsDiscarded);
+
+	
+	//Check that all but 2 cards were discarded
+	if((cardsDrawn - cardsDiscarded) == 2)
+	{
+	    printf("TEST 6: PASSED with correct number of cards discarded\n");
+	    numTestsPassed++;
+	}
+	else
+	{
+	    printf("TEST 6: FAILED with correct number of cards not discarded\n");
 	}
 	
 	
